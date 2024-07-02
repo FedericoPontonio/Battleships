@@ -1,0 +1,12 @@
+MAIN CONFIGURATIONS:
+    main files and folders created;
+    npm initialized;
+    webpack initialized;
+        html-plugin installed;
+        css-loader installed;
+        asset-loader configured;
+    scripts added (build, watch, prettier, prettierCheck);
+    ESlint installed;
+    prettier installed
+    eslint-config-prettier configured (manages the conflicts between eslint and prettier);
+    
