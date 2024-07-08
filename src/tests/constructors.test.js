@@ -26,6 +26,8 @@ test('boat object gets placed in appropriate board slot', () => {
 //need to make sure that the size of the boat corrisponds to the number of occupied cells and that the cells are adiacent.
 test('excludes illegal placements', () => {
   let player1Board = Gameboard();let battlestarGalactica= Ship(3,'battlestarGalactica');
-  expect(Gameboard().possiblePlacements(battlestarGalactica.size-1, 0, 0)).toMatchObject([[2, 0], [0, 2]]);
-  expect(Gameboard().possiblePlacements(battlestarGalactica.size-1, 0, 3)).toMatchObject([[2, 3], [0,1],[0,5]]);//tutto da rivedere
+  expect(Gameboard().possiblePlacements(battlestarGalactica.size, 0, 0)).toMatchObject([[[0,0],[1,0],[2,0]], [[0,0],[0,1],[0,2]]]);
+  expect(Gameboard().possiblePlacements(battlestarGalactica.size, 9, 0)).toMatchObject([[[7,0],[8,0],[9,0]], [[9,0], [9,1],[9,2]]]);
+  expect(Gameboard().possiblePlacements(battlestarGalactica.size, 0, 3)).toMatchObject([[[0,3],[1,3],[2,3]], [[0,1],[0,2],[0,3]], [[0,3],[0,4],[0,5]]]);
+  expect(Gameboard().possiblePlacements(5, 4, 6)).toMatchObject([[[0,6],[1,6],[2,6],[3,6],[4,6]], [[4,6],[5,6],[6,6],[7,6],[8,6]], [[4,2],[4,3],[4,4],[4,5],[4,6]]]);
 });
