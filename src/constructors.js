@@ -22,47 +22,77 @@ export function Gameboard() {
         }
         board.push(ordinatesArray)
     };
-    function placeBoat(ship, x, y) {    //the method store a reference of the ship object in the appropriate space-id does not instantiate the ship itself!
-        this.board[x][y].boatInPlace = ship
+
+    function placeBoat(ship, coordinates) {    //the method store a reference of the ship object in the appropriate space-id does not instantiate the ship itself!
+        if (coordinates == null) {
+            throw new Error("The vessel can't overflow the game boardy")
+        }
+        for (let i = 0;i < coordinates.length; i++) {
+            this.board[coordinates[i][0]][coordinates[i][1]].boatInPlace = ship
+        }
     };
+
+    function receiveAttack(x, y) {
+        if(this.board[x][y].boatInPlace == null) {
+            this.board[x][y].hasBeenTargeted = true;
+            return 'No ship has been hit.'
+        }
+        else {
+            this.board[x][y].boatInPlace.hit();
+            return ''+this.board[x][y].boatInPlace.name+' has been hit!'
+        }
+    }
+
     function possiblePlacements (boatSize, x, y) {
-        const preFilteredArray = [
-            [[x-(boatSize-1),y],[x,y]],
-            [[x,y],[x+(boatSize-1),y]], 
-            [[x,y-(boatSize-1)], [x,y]],
-            [[x,y], [x,y+(boatSize-1)]]
-        ];//remember to manage the case of size 1 ship
+    //remember to manage the case of size 1 ship
         let postFilteredArray = [];
-        if (preFilteredArray[0][0][0]<10 && preFilteredArray[0][0][0]>=0) {
+        let objPlacements = {};
+        if (x-(boatSize-1)>=0) {
             let tempArrayCaseZero = [];
             for (let i = x-(boatSize-1); i<=x;i++) {
                 tempArrayCaseZero.push([i,y])
             };
-            postFilteredArray.push(tempArrayCaseZero)
+            postFilteredArray.push(tempArrayCaseZero);//eventually to remove
+            objPlacements.letf = tempArrayCaseZero;
         }
-        if(preFilteredArray[1][1][0]<10 &&preFilteredArray[1][1][0]>=0) {
+        else {
+            objPlacements.letf = null;
+        }
+        if(x+(boatSize-1)<10) {
             let tempArrayCaseOne = [];
             for (let i=x;i<=x+(boatSize-1);i++) {
                 tempArrayCaseOne.push([i,y])
             }
-            postFilteredArray.push(tempArrayCaseOne)
+            postFilteredArray.push(tempArrayCaseOne);
+            objPlacements.right = tempArrayCaseOne;
         }
-        if(preFilteredArray[2][0][1]<10 &&preFilteredArray[2][0][1]>=0) {
+        else {
+            objPlacements.right = null;
+        }
+        if(y-(boatSize-1)>=0) {
             let tempArrayCaseTwo =[];
             for (let i=y-(boatSize-1);i<=y;i++) {
                 tempArrayCaseTwo.push([x,i])
             }
-            postFilteredArray.push(tempArrayCaseTwo)
+            postFilteredArray.push(tempArrayCaseTwo);
+            objPlacements.up = tempArrayCaseTwo;
         }
-        if(preFilteredArray[3][1][1]<10 &&preFilteredArray[3][1][1]>=0) {
+        else {
+            objPlacements.up = null;
+        }
+        if(y+(boatSize-1)<10) {
             let tempArrayCasethree=[];
             for (let i=y;i<=y+(boatSize-1);i++) {
                 tempArrayCasethree.push([x,i])
             }
-            postFilteredArray.push(tempArrayCasethree)
+            postFilteredArray.push(tempArrayCasethree);
+            objPlacements.down = tempArrayCasethree;
         }
-        return postFilteredArray
+        else {
+            objPlacements.down = null;
+        }
+        return objPlacements
     };
-    return {board, placeBoat, possiblePlacements}
+    return {board, placeBoat, possiblePlacements, receiveAttack}
 };
 
