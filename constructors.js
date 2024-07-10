@@ -1,4 +1,7 @@
-import { prefetch } from "webpack";
+import { tempAssets } from "./assets.js";
+import { renderGameOver } from "./rendering.js";
+const playerOne = tempAssets.playerOne;
+const playerTwo = tempAssets.playerTwo;
 
 export function Ship (size, name) {
     let hp=size;
@@ -15,6 +18,7 @@ export function Ship (size, name) {
 };
 export function Gameboard() {
     let board = [];
+    let boatsSunkCounter = 0;
     for (let i = 0; i<10; i++) {
         let ordinatesArray =[];
         for (let j=0; j<10; j++) {
@@ -28,20 +32,44 @@ export function Gameboard() {
             throw new Error("The vessel can't overflow the game boardy")
         }
         for (let i = 0;i < coordinates.length; i++) {
-            this.board[coordinates[i][0]][coordinates[i][1]].boatInPlace = ship
+            if (this.board[coordinates[i][0]][coordinates[i][1]].boatInPlace != null) {
+                throw new Error('A boat is already in this place');
+            }
+            else {
+                this.board[coordinates[i][0]][coordinates[i][1]].boatInPlace = ship
+            }
         }
     };
 
     function receiveAttack(x, y) {
+        if(this.board[x][y].hasBeenTargeted == true) {
+            return 'This location has already been fired!'
+        }
         if(this.board[x][y].boatInPlace == null) {
             this.board[x][y].hasBeenTargeted = true;
             return 'No ship has been hit.'
         }
         else {
             this.board[x][y].boatInPlace.hit();
+            this.board[x][y].hasBeenTargeted = true;
+            if (this.board[x][y].boatInPlace.isSunk) {
+                this.boatsSunkCounter = this.boatsSunkCounter + 1;
+            }
+            if(this.boatsSunkCounter==5) {
+                return ((playerOne, playerTwo)=> {
+                    let winner;
+                    if (playerOne.gameboard.boatsSunkCounter==5) {
+                        winner = playerTwo.name
+                    }
+                    else {
+                        winner = playerOne.name
+                    }
+                    return renderGameOver('All boats have been sunk! '+ winner + ' won!')
+                })(playerOne, playerTwo);
+            }
             return ''+this.board[x][y].boatInPlace.name+' has been hit!'
         }
-    }
+    };
 
     function possiblePlacements (boatSize, x, y) {
     //remember to manage the case of size 1 ship
@@ -93,6 +121,10 @@ export function Gameboard() {
         }
         return objPlacements
     };
-    return {board, placeBoat, possiblePlacements, receiveAttack}
+    return {board, boatsSunkCounter, placeBoat, possiblePlacements, receiveAttack}
 };
 
+export function Player(name = null) {
+    let gameboard = Gameboard();
+    return {gameboard, name, isPlayerTurn:false}
+};
