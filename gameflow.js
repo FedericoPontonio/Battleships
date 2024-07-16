@@ -1,11 +1,8 @@
-import { renderGrid } from "./rendering.js";
+import { renderGrid, renderInitialForm } from "./rendering.js";
 import { tempAssets } from "./assets.js";
 
-export function gameFlow() {
-    tempAssets.playerOne.isPlayerTurn = true;
-    const playerOneDiv = document.querySelector('.playerOne');
-    const playerTwoDiv = document.querySelector('.playerTwo');
-    renderGrid(tempAssets.playerOne, playerOneDiv, tempAssets.playerTwo);
-    renderGrid(tempAssets.playerTwo, playerTwoDiv, tempAssets.playerOne);
 
-}
+export function gameFlow() {
+    renderInitialForm(tempAssets.playerOne, tempAssets.playerTwo);
+    tempAssets.playerOne.isPlayerTurn = true;
+};

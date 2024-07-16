@@ -16,6 +16,7 @@ export function Ship (size, name) {
     };
     return {name, size, hp, isSunk, hit}
 };
+
 export function Gameboard() {
     let board = [];
     let boatsSunkCounter = 0;
@@ -58,13 +59,16 @@ export function Gameboard() {
             if(this.boatsSunkCounter==5) {
                 return ((playerOne, playerTwo)=> {
                     let winner;
+                    let loser;
                     if (playerOne.gameboard.boatsSunkCounter==5) {
-                        winner = playerTwo.name
+                        winner = playerOne.name
+                        loser = playerTwo.name
                     }
                     else {
-                        winner = playerOne.name
+                        winner = playerTwo.name
+                        loser = playerOne.name
                     }
-                    return renderGameOver('All boats have been sunk! '+ winner + ' won!')
+                    return renderGameOver('All ' + loser + "'s boats have been sunk! "+ winner + ' won!')
                 })(playerOne, playerTwo);
             }
             return ''+this.board[x][y].boatInPlace.name+' has been hit!'
@@ -126,5 +130,127 @@ export function Gameboard() {
 
 export function Player(name = null) {
     let gameboard = Gameboard();
-    return {gameboard, name, isPlayerTurn:false}
+    let isAI = false;
+    let fullGrid;
+    let BoatDetectedBehaviourAI = {
+        isBoatDetected : false,
+        coordinatesQueue:[],
+        orizontalChecked:false,
+        topChecked:false,
+    };
+    let AiBehaviour = function () {
+        if (this.isAI == true) {
+            //responsivity feedback
+            const messagesSection = document.querySelector('.messagesSection');
+            messagesSection.textContent = 'Calcolating next move . . .';
+            let lastQueueElement = this.BoatDetectedBehaviourAI.coordinatesQueue[this.BoatDetectedBehaviourAI.coordinatesQueue.length-1];
+            
+
+            //Detection ==true Behaviour
+            if(this.BoatDetectedBehaviourAI.isBoatDetected) {
+                //check left
+                if (lastQueueElement[1]-1 >= 0 &&
+                    this.BoatDetectedBehaviourAI.orizontalChecked == false &&
+                    this.gameboard.board[lastQueueElement[1]-1][lastQueueElement[0]].hasBeenTargeted == false &&
+                    this.gameboard.board[lastQueueElement[1]][lastQueueElement[0]].boatInPlace != null
+                ){
+                    this.BoatDetectedBehaviourAI.coordinatesQueue.push((lastQueueElement[0]).toString() + (lastQueueElement[1]-1).toString());
+                    
+                }
+                else {
+                    //reset queue and check right
+                    if (this.BoatDetectedBehaviourAI.coordinatesQueue[0][0].toString()+this.BoatDetectedBehaviourAI.coordinatesQueue[0][1].toString() > lastQueueElement &&
+                    this.BoatDetectedBehaviourAI.orizontalChecked == false
+                    ) {
+                        this.BoatDetectedBehaviourAI.coordinatesQueue.splice(1);
+                        lastQueueElement = this.BoatDetectedBehaviourAI.coordinatesQueue[0];
+                    }
+                    if (+lastQueueElement[1]+1 <=9 &&
+                        this.BoatDetectedBehaviourAI.orizontalChecked == false &&
+                        this.gameboard.board[+lastQueueElement[1]+1][lastQueueElement[0]].hasBeenTargeted == false &&
+                        this.gameboard.board[lastQueueElement[1]][lastQueueElement[0]].boatInPlace != null
+                    ){
+                        
+                        this.BoatDetectedBehaviourAI.coordinatesQueue.push(lastQueueElement[0].toString()+ (+lastQueueElement[1]+1).toString());
+                    }
+                    else {
+                        //reset queue and check up
+                        if (this.BoatDetectedBehaviourAI.orizontalChecked == false) {
+                            this.BoatDetectedBehaviourAI.coordinatesQueue.splice(1);
+                            lastQueueElement = this.BoatDetectedBehaviourAI.coordinatesQueue[0];
+                        };
+                        this.BoatDetectedBehaviourAI.orizontalChecked = true;
+
+                        if(lastQueueElement[0]-1 >= 0 &&
+                            this.gameboard.board[lastQueueElement[1]][lastQueueElement[0]-1].hasBeenTargeted == false &&
+                            this.gameboard.board[lastQueueElement[1]][lastQueueElement[0]].boatInPlace != null
+                        ) {
+                            this.BoatDetectedBehaviourAI.coordinatesQueue.push((lastQueueElement[0]-1).toString() + (lastQueueElement[1]).toString());
+                        }
+                        else {
+                            //reset queue and check down
+                            if (this.BoatDetectedBehaviourAI.topChecked == false) {
+                                this.BoatDetectedBehaviourAI.coordinatesQueue.splice(1);
+                                lastQueueElement = this.BoatDetectedBehaviourAI.coordinatesQueue[0];
+                            }
+                            this.BoatDetectedBehaviourAI.topChecked = true;
+                            if (+lastQueueElement[0]+1 <= 9 &&
+                                this.gameboard.board[lastQueueElement[1]][+lastQueueElement[0]+1].hasBeenTargeted ==false &&
+                                this.gameboard.board[lastQueueElement[1]][lastQueueElement[0]].boatInPlace != null
+                            ) {
+                                this.BoatDetectedBehaviourAI.coordinatesQueue.push((+lastQueueElement[0]+1).toString()+ (lastQueueElement[1]).toString());
+                            }
+                            else {
+                                //most nested else - resets all AI operations
+                                this.BoatDetectedBehaviourAI.isBoatDetected = false;
+                                this.BoatDetectedBehaviourAI.coordinatesQueue = [];
+                                this.BoatDetectedBehaviourAI.orizontalChecked = false;
+                                this.BoatDetectedBehaviourAI.topChecked = false;
+                                //detection == false behaviour
+                                let untargetedCells = document.querySelectorAll(`.cell.${this.name}`);
+                                const minCeiled = Math.ceil(0);
+                                const maxFloored = Math.floor(untargetedCells.length-1);
+                                const randomNumber = Math.floor(Math.random() *(maxFloored - minCeiled))
+                                setTimeout (()=>{
+                                    untargetedCells[randomNumber].click();
+
+                                }, 50);
+                            };
+                        };
+
+
+                        
+
+                    }
+                }
+                if (this.BoatDetectedBehaviourAI.isBoatDetected) {
+                    setTimeout (()=>{
+                        let cellToClick = this.BoatDetectedBehaviourAI.coordinatesQueue[this.BoatDetectedBehaviourAI.coordinatesQueue.length-1]
+                        if (cellToClick[0] == 0 && cellToClick[1] == 0) {
+                            cellToClick = 0
+                        }
+                        else if (cellToClick[0] == 0 && cellToClick[1] != 0) {
+                            cellToClick = cellToClick[1]
+                        }
+                        this.fullGrid[cellToClick].click();
+                    }, 50);
+                }
+                
+            }
+            else {
+                //detection == false behaviour
+                let untargetedCells = document.querySelectorAll(`.cell.${this.name}`);
+                
+                const minCeiled = Math.ceil(0);
+                const maxFloored = Math.floor(untargetedCells.length-1);
+                const randomNumber = Math.floor(Math.random() *(maxFloored - minCeiled))
+                setTimeout (()=>{
+                    untargetedCells[randomNumber].click();
+
+                }, 50);
+            }
+        };
+    };
+    return {gameboard, name, isPlayerTurn:false, isAI, AiBehaviour, BoatDetectedBehaviourAI, fullGrid}
 };
+

@@ -1,4 +1,4 @@
-import {Ship, Gameboard, Player} from './constructors.js';
+import {Ship, Player} from './constructors.js';
 
 //temporary constructed assets
 
@@ -23,24 +23,21 @@ playerOne.gameboard.placeBoat(cruiser1, playerOne.gameboard.possiblePlacements(c
 playerOne.gameboard.placeBoat(submarine1, playerOne.gameboard.possiblePlacements(submarine1.size, 9,2).letf);
 playerOne.gameboard.placeBoat(destroyer1, playerOne.gameboard.possiblePlacements(destroyer1.size, 5,1).down);
 
-playerTwo.gameboard.placeBoat(carrier2, playerTwo.gameboard.possiblePlacements(carrier2.size, 6,0).letf);
-playerTwo.gameboard.placeBoat(battleship2, playerTwo.gameboard.possiblePlacements(battleship2.size, 2,8).up);
-playerTwo.gameboard.placeBoat(cruiser2, playerTwo.gameboard.possiblePlacements(cruiser2.size, 5,5).right);
-playerTwo.gameboard.placeBoat(submarine2, playerTwo.gameboard.possiblePlacements(submarine2.size, 9,6).down);
-playerTwo.gameboard.placeBoat(destroyer2, playerTwo.gameboard.possiblePlacements(destroyer2.size, 1,1).letf);
+// playerTwo.gameboard.placeBoat(carrier2, playerTwo.gameboard.possiblePlacements(carrier2.size, 6,0).letf);
+// playerTwo.gameboard.placeBoat(battleship2, playerTwo.gameboard.possiblePlacements(battleship2.size, 2,8).up);
+// playerTwo.gameboard.placeBoat(cruiser2, playerTwo.gameboard.possiblePlacements(cruiser2.size, 5,5).right);
+// playerTwo.gameboard.placeBoat(submarine2, playerTwo.gameboard.possiblePlacements(submarine2.size, 9,6).down);
+// playerTwo.gameboard.placeBoat(destroyer2, playerTwo.gameboard.possiblePlacements(destroyer2.size, 1,1).letf);
+//for rapid testing of gameOver
+playerTwo.gameboard.placeBoat(carrier2, playerTwo.gameboard.possiblePlacements(carrier2.size, 0,0).right);
+playerTwo.gameboard.placeBoat(battleship2, playerTwo.gameboard.possiblePlacements(battleship2.size, 0,1).right);
+playerTwo.gameboard.placeBoat(cruiser2, playerTwo.gameboard.possiblePlacements(cruiser2.size, 0,2).right);
+playerTwo.gameboard.placeBoat(submarine2, playerTwo.gameboard.possiblePlacements(submarine2.size, 0,3).right);
+playerTwo.gameboard.placeBoat(destroyer2, playerTwo.gameboard.possiblePlacements(destroyer2.size, 0,4).right);
+
 
 
 export const tempAssets = {
     playerOne,
     playerTwo,
-    carrier1,
-    carrier2,
-    battleship1,
-    battleship2,
-    cruiser1,
-    cruiser2,
-    submarine1,
-    submarine2,
-    destroyer1,
-    destroyer2,
 };
