@@ -1,7 +1,7 @@
-import { tempAssets } from "./assets.js";
+import { playersData } from "./playersData.js";
 import { renderGameOver } from "./rendering.js";
-const playerOne = tempAssets.playerOne;
-const playerTwo = tempAssets.playerTwo;
+const playerOne = playersData.playerOne;
+const playerTwo = playersData.playerTwo;
 
 export function Ship (size, name) {
     let hp=size;

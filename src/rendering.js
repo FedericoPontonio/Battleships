@@ -1,3 +1,4 @@
+import { boatsPlacementHandler } from "./boatsPlacement.js";
 const messagesSection = document.querySelector('.messagesSection');
 const playerOneDiv = document.querySelector('.playerOne');
 const playerTwoDiv = document.querySelector('.playerTwo');
@@ -119,6 +120,7 @@ export function renderInitialForm(playerOne, playerTwo) {
         //AI for player One
     let activateAIPlayerOne = false;
     const AISwitcherSection1 = document.createElement('div');
+    AISwitcherSection1.classList ='aiSwitcher';
     const enableAI1 = document.createElement('div');
     enableAI1.textContent='Enable AI for player One';
     const label1 = document.createElement('label');
@@ -143,6 +145,7 @@ export function renderInitialForm(playerOne, playerTwo) {
         //AI for player Two
     let activateAIPlayerTwo = false;
     const AISwitcherSection2 = document.createElement('div');
+    AISwitcherSection2.classList = 'aiSwitcher';
     const enableAI2 = document.createElement('div');
     enableAI2.textContent='Enable AI for player Two';
     const label2 = document.createElement('label');
@@ -163,6 +166,7 @@ export function renderInitialForm(playerOne, playerTwo) {
     label2.appendChild(span2);
     AISwitcherSection2.appendChild(enableAI2);
     AISwitcherSection2.appendChild(label2);
+    
 
     //submit
     const submitForm = document.createElement('button');
@@ -191,6 +195,7 @@ export function renderInitialForm(playerOne, playerTwo) {
             playerTwo.isAI = true
         }
         body.removeChild(formDiv);
+        // boatsPlacementHandler(); //uncomment to access boat placement tool
         renderNames(playerOne, playerTwo);
         renderGrid(playerOne, playerOneDiv, playerTwo);
         renderGrid(playerTwo, playerTwoDiv, playerOne);
@@ -212,9 +217,9 @@ export function renderInitialForm(playerOne, playerTwo) {
     formDiv.appendChild(AISwitcherSection1);
     formDiv.appendChild(mockDiv3);
     formDiv.appendChild(AISwitcherSection2);
-    formDiv.appendChild(mockDiv4);
+    formDiv.appendChild(mockDiv2);
     formDiv.appendChild(submitForm);
-
+    formDiv.appendChild(mockDiv4);
 };
 
 function renderNames(playerOne, playerTwo) {
@@ -223,3 +228,4 @@ function renderNames(playerOne, playerTwo) {
     const playerTwoName = document.querySelector('.playerTwoName');
     playerTwoName.textContent = playerTwo.name;
 };
+

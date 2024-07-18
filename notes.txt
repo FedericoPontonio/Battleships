@@ -17,3 +17,10 @@ MAIN CONFIGURATIONS:
         -if we assume the player do know what boat has been hit (and its size), then the AI could stop searching for a boat when it reaches the hp == 0 of the boat as opposed to scanning around it.
         -if we assume the player knows the sizes of the boats but not which boat has been hit, then the AI could stop searching for a boat when it reaches the max size of the longest one.
         -based on the game version, a player whose ship has been sunk, may or may not have to announce it as well as which ship has sunk. This would the premises under which the AI operates.
+
+
+images.battleship.src = 'images/Battleship-board.png';images.battleship.style = 'transform:rotate(0.25turn)';
+images.carrier.src = 'images/Carrier-board.png';images.carrier.style = 'transform:rotate(0.25turn)';
+images.destroyer.src = 'images/Destroyer-board.png';images.destroyer.style = 'transform:rotate(0.25turn)';
+images.submarine.src = 'images/Submarine-board.png';images.submarine.style = 'transform:rotate(0.25turn)';
+images.patrolBoat.src = 'images/Patrol Boat-board.png';images.patrolBoat.style = 'transform:rotate(0.25turn)';
